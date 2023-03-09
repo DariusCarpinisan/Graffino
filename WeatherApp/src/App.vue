@@ -26,6 +26,7 @@ import TheWelcome from "./components/TheWelcome.vue";
 <style scoped>
 header {
   line-height: 1.5;
+  color: #2c3e50;
 }
 
 .logo {
