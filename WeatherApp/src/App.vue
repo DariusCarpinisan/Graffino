@@ -7,7 +7,7 @@ export default {
       apiKey: "b3241bb7b3f846a4b05132912230903",
       url: "http://api.weatherapi.com/v1/current.json?key=b3241bb7b3f846a4b05132912230903&q=",
       city: "",
-      country: null,
+      country: "",
       weather: null,
       icon: null,
       description: null,
@@ -30,6 +30,7 @@ export default {
         this.error = "Please enter a city.";
         return;
       }
+
       axios
         .get(
           this.url +
@@ -102,8 +103,9 @@ export default {
       <button @click="getWeather">Search</button>
     </div>
     <div v-if="weather" class="city">
-      <p>{{ city }}, {{ country }}</p>
+      <p>{{ city }} / {{ country }}</p>
     </div>
+
     <div v-if="weather" class="weather">
       <div class="weather__description">
         <p>{{ description }}</p>
@@ -117,8 +119,15 @@ export default {
       <div class="weather__humidity">
         <p>Humidity: {{ humidity }}%</p>
       </div>
+
       <div class="weather__wind">
         <p>Wind: {{ wind }}km/h</p>
+      </div>
+      <div class="weather__sunrise">
+        <p>Sunrise: {{ sunrise }}</p>
+      </div>
+      <div class="weather__sunset">
+        <p>Sunset: {{ sunset }}</p>
       </div>
     </div>
 
@@ -161,6 +170,19 @@ main {
 }
 header {
   font-size: 3rem;
+  font-weight: 700;
+  color: #333;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.city {
+  font-size: 1.5rem;
   font-weight: 700;
   color: #333;
 }
