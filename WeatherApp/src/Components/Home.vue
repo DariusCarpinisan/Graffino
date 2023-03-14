@@ -1,5 +1,6 @@
 <script>
 import axios from "axios";
+
 export default {
   name: "HomeApp",
   data() {
@@ -9,6 +10,7 @@ export default {
       cityName: null,
       country: "",
       weather: null,
+      feelslike_c: null,
       icon: null,
       description: null,
       temp: null,
@@ -40,6 +42,7 @@ export default {
           console.log(response);
           this.cityName = this.city;
           this.weather = response.data;
+          this.feelslike_c = this.weather.current.feelslike_c;
           this.icon = this.weather.current.condition.icon;
           this.description = this.weather.current.condition.text;
           this.temp = this.weather.current.temp_c;
@@ -116,19 +119,18 @@ export default {
 <template>
   <main>
     <header>
-      <h1 class="header">Weather</h1>
+      <h1 class="header">Find Weather</h1>
     </header>
-    <div class="search">
-      <input
-        type="text"
-        placeholder="City"
-        v-model="city"
-        @keyup.enter="getWeather"
-      />
-      <button @click="getWeather">Search</button>
-    </div>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <form @submit.prevent="getWeather">
+      <input type="search" placeholder="Search here ..." v-model="city" />
+      <i class="fa fa-search"></i>
+    </form>
     <div v-if="cityName" class="city">
-      <p>{{ cityName }} / {{ country }}</p>
+      <p>{{ cityName }}, {{ country }}</p>
     </div>
 
     <div v-if="weather" class="weather">
@@ -140,6 +142,9 @@ export default {
       </div>
       <div class="weather__temp">
         <p>{{ temp }}°C</p>
+      </div>
+      <div class="weather__feelslike">
+        <p>Feels like: {{ feelslike_c }}°C</p>
       </div>
       <div class="weather__humidity">
         <p>Humidity: {{ humidity }}%</p>
@@ -211,24 +216,22 @@ export default {
 
 html,
 body {
-  background-image: url("https://images.unsplash.com/photo-1558486012-817176f84c6d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1804&q=80");
+  background-image: url("https://emerging-europe.com/wp-content/uploads/2020/07/bigstock-planet-earth-at-night-view-of-354648194.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }
 
-main {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
+h2 {
+  color: #0026ff;
+  font-family: copperplate gothic light;
+  font-size: 20px;
 }
 
 .header {
-  font-size: 3rem;
+  font-size: 15px;
+  color: #ccc;
   font-weight: bold;
   font-family: copperplate gothic light;
-  margin-bottom: 2rem;
 }
 
 .search {
@@ -238,30 +241,75 @@ main {
   margin-bottom: 2rem;
 }
 
-input[type="text"] {
-  padding: 0.5rem;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  margin-right: 1rem;
-  width: 50%;
+form {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 1s;
+  width: 50px;
+  height: 50px;
+  background: white;
+  box-sizing: border-box;
+  border-radius: 25px;
+  border: 4px solid white;
+  padding: 5px;
 }
 
-button {
-  padding: 0.5rem;
-  background-color: #333;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
+input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 42.5px;
+  line-height: 30px;
+  outline: 0;
+  border: 0;
+  display: none;
+  font-size: 1em;
+  border-radius: 20px;
+  padding: 0 20px;
+}
+
+.fa {
+  box-sizing: border-box;
+  padding: 10px;
+  width: 42.5px;
+  height: 42.5px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-radius: 50%;
+  color: #07051a;
+  text-align: center;
+  font-size: 1.2em;
+  transition: all 1s;
+}
+
+form:hover {
+  width: 300px;
   cursor: pointer;
 }
 
+form:hover input {
+  display: block;
+}
+
+form:hover .fa {
+  background: #07051a;
+  color: white;
+}
+
 .city {
-  font-size: 2rem;
+  font-size: 25px;
   font-weight: bold;
-  margin-bottom: 2rem;
+  color: #ccc;
+  font-family: copperplate gothic light;
+  text-align: center;
 }
 
 .weather {
+  color: #ccc;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -272,85 +320,84 @@ button {
 .weather__description {
   font-size: 2rem;
   font-weight: bold;
-  margin-bottom: 1rem;
+  color: #ccc;
 }
 
 .weather__icon {
-  margin-bottom: 1rem;
 }
 
 .weather__temp {
-  font-size: 4rem;
+  font-size: 40px;
   font-weight: bold;
-  margin-bottom: 1rem;
+  color: #ccc;
 }
 
+.weather__feelslike,
 .weather__humidity,
 .weather__wind,
 .weather__sunrise,
 .weather__sunset {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.error {
-  font-size: 2rem;
-  font-weight: bold;
   font-family: copperplate gothic light;
-  color: rgb(255, 255, 255);
-  margin-bottom: 2rem;
+  color: #ccc;
 }
 
 .forecast {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 2rem;
 }
 
 .forecast__day {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5%;
+  border: 5px solid rgba(255, 255, 255, 0.2);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 1rem;
-  width: 10rem;
+  margin: 10px;
+  width: 150px;
+  color: #ccc;
 }
 
 .forecast__date {
-  font-size: 1.5rem;
   font-weight: bold;
-  margin-bottom: 1rem;
 }
 
 .forecast__icon {
-  margin-bottom: 1rem;
 }
 
 .forecast__temp {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
 }
 
 .forecast__humidity,
 .forecast__wind {
-  font-size: 1rem;
-  margin-bottom: 1rem;
 }
 
 .history {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-bottom: 2rem;
 }
 
 .history__day {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 5%;
+  border: 5px solid rgba(255, 255, 255, 0.2);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin: 1rem;
-  width: 10rem;
+  margin: 10px;
+  width: 150px;
+  color: #ccc;
+}
+
+.error {
+  font-size: 20px;
+  text-align: center;
+  font-weight: bold;
+  font-family: cursive;
+  color: rgb(255, 255, 255);
 }
 </style>
