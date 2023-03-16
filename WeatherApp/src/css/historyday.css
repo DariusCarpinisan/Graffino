@@ -1,0 +1,59 @@
+.history {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-left: 160px;
+  margin-top: 60px;
+}
+
+.history__day {
+  background-color: rgba(110, 110, 110, 0.5);
+  border-radius: 5%;
+  border: 3px solid rgba(161, 161, 161, 0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 10px;
+  width: 150px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+}
+
+.history_title {
+  position: relative;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bolder;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  top: 120px;
+  margin-left: 300px;
+}
+
+@media only screen and (max-width: 768px) {
+  .history_title {
+    margin-top: 20px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .history_title {
+    margin-top: 10px;
+  }
+}
+
+.history_date {
+  font-weight: bold;
+  color: #000000;
+}
+
+.history__icon {
+  font-size: 40px;
+}
+
+.history__temp {
+  font-size: 18px;
+  font-weight: bold;
+  font-family: bahnschrift light;
+  color: #000000;
+}
