@@ -17,8 +17,8 @@ export default {
   },
   data() {
     return {
-      apiKey: "b3241bb7b3f846a4b05132912230903",
-      unsplashApiKey: "v6PLxvQp-fZ2aeW1zla-kVox3OzVijcPxDS6IiKw9jY",
+      apiKey: import.meta.env.VITE_API_KEY,
+      unsplashApiKey: import.meta.env.VITE_UNSPLASH_API_KEY,
       photoUrl: null,
       city: "",
       cityName: null,
