@@ -21,6 +21,15 @@ export default {
       unsplashApiKey: import.meta.env.VITE_UNSPLASH_API_KEY,
       photoUrl: null,
       city: "",
+      cities: [
+        "Bucharest",
+        "London",
+        "Paris",
+        "New York",
+        "Tokyo",
+        "Sydney",
+        "Moscow",
+      ],
       cityName: null,
       country: "",
       date: null,
@@ -42,7 +51,55 @@ export default {
     };
   },
   methods: {
+    getCountry(city) {
+      switch (city) {
+        case "Bucharest":
+          return "Romania";
+        case "London":
+          return "United Kingdom";
+        case "Paris":
+          return "France";
+        case "New York":
+          return "United States of America";
+        case "Tokyo":
+          return "Japan";
+        case "Sydney":
+          return "Australia";
+        case "Moscow":
+          return "Russia";
+        default:
+          return "";
+      }
+    },
+    getWeatherForCity(city, country) {
+      this.refreshWeatherData();
+      this.city = city;
+      this.country = country;
+      this.getWeather();
+    },
+
+    refreshWeatherData() {
+      this.cityName = null;
+      this.country = null;
+      this.date = null;
+      this.time = null;
+      this.weather = null;
+      this.feelslike_c = null;
+      this.icon = null;
+      this.description = null;
+      this.temp = null;
+      this.humidity = null;
+      this.wind = null;
+      this.sunrise = null;
+      this.sunset = null;
+      this.maxtemp_c = null;
+      this.mintemp_c = null;
+      this.avghumidity = null;
+      this.maxwind_kph = null;
+      this.error = null;
+    },
     getWeather() {
+      this.photoUrl = null;
       if (!this.city) {
         this.error = "Please enter a city.";
         return;
@@ -75,7 +132,7 @@ export default {
           switch (this.description) {
             case "Sunny":
             case "Clear":
-              query = "Clear Weather";
+              query = "Clear sky";
               break;
             case "Partly cloudy":
             case "Cloudy":
@@ -88,6 +145,7 @@ export default {
               query = "Mist";
               break;
             case "Rain":
+            case "Moderate rain":
             case "Moderate or heavy rain shower":
             case "Light rain":
             case "Moderate or heavy rain":
@@ -144,13 +202,10 @@ export default {
         });
     },
   },
-  // watch: {
-  //   city: function (newValue, oldValue) {
-  //     this.getWeather();
-  //   },
-  // },
+
   mounted() {
     this.getWeather();
+    this.refreshWeatherData();
   },
 };
 </script>
@@ -179,41 +234,11 @@ export default {
         <div class="cities">
           <ul>
             <li
-              @click="
-                city = 'New York';
-                country = 'USA';
-                getWeather();
-              "
+              v-for="city in cities"
+              :key="city"
+              @click="getWeatherForCity(city, getCountry(city))"
             >
-              New York
-            </li>
-            <li
-              @click="
-                city = 'London';
-                country = 'UK';
-                getWeather();
-              "
-            >
-              London
-            </li>
-
-            <li
-              @click="
-                city = 'Paris';
-                country = 'France';
-                getWeather();
-              "
-            >
-              Paris
-            </li>
-            <li
-              @click="
-                city = 'Tokyo';
-                country = 'Japan';
-                getWeather();
-              "
-            >
-              Tokyo
+              {{ city }}
             </li>
           </ul>
         </div>
@@ -225,10 +250,7 @@ export default {
     <div v-if="weather" class="weather">
       <div class="weather__temp">{{ temp }}°C</div>
       <div class="weather__icon">
-        <img :src="icon" alt="weather icon" />
-      </div>
-      <div class="weather__description">
-        {{ description }}
+        <img :src="icon" width="150" height="150" alt="weather icon" />
       </div>
       <div class="weather__feelslike">Feels like: {{ feelslike_c }}°C</div>
       <div class="weather__humidity">Humidity: {{ humidity }}%</div>
