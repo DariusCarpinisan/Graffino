@@ -64,7 +64,7 @@
 .weather__icon {
   position: absolute;
   margin-left: 150px;
-  margin-top: 50px;
+  margin-top: 80px;
 }
 
 .weather__temp {
@@ -85,19 +85,153 @@
 }
 .weather__humidity {
   position: absolute;
+  margin-right: 250px;
 }
 .weather__wind {
   position: absolute;
+  margin-right: 900px;
+  margin-bottom: 20px;
+  width: 120px;
+  height: 100px;
+  background-color: rgba(110, 110, 110, 0.3);
+  border-radius: 5%;
+  /* border: 3px solid rgba(161, 161, 161, 0.5); */
+  text-align: center;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 18px;
+  padding: 8px;
+}
+.wind_title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.weather__wind__toggle {
+  position: relative;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.weather__precipitation {
+  position: absolute;
+  margin-right: 640px;
+  margin-bottom: 20px;
+  width: 120px;
+  height: 100px;
+  background-color: rgba(110, 110, 110, 0.3);
+  border-radius: 5%;
+  /* border: 3px solid rgba(161, 161, 161, 0.5); */
+  text-align: center;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 18px;
+  padding: 8px;
+}
+.precipitation_title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.weather__precipitation__toggle {
+  position: relative;
+  margin-right: 5px;
+  margin-left: 5px;
 }
 
-.switchgrades {
-  position: relative;
-  margin-left: 300px;
-  margin-top: 20px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #000000;
+.weather__pressure {
+  position: absolute;
+  margin-right: 380px;
+  margin-bottom: 20px;
+  width: 120px;
+  height: 100px;
+  background-color: rgba(110, 110, 110, 0.3);
+  border-radius: 5%;
+  /* border: 3px solid rgba(161, 161, 161, 0.5); */
+  text-align: center;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 18px;
+  padding: 8px;
+}
+.pressure_title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.weather__pressure__toggle {
+  position: relative;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.weather__visibility {
+  position: absolute;
+  margin-right: 900px;
+  z-index: 1;
+  margin-top: 190px;
+  width: 120px;
+  height: 100px;
+  background-color: rgba(110, 110, 110, 0.3);
+  border-radius: 5%;
+  text-align: center;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 18px;
+  padding: 8px;
+}
+.visibility_title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.weather__visibility__toggle {
+  position: relative;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.weather__air_quality {
+  position: absolute;
+  margin-right: 640px;
+  z-index: 1;
+  margin-top: 190px;
+  width: 120px;
+  height: 100px;
+  background-color: rgba(110, 110, 110, 0.3);
+  border-radius: 5%;
+  text-align: center;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 18px;
+  padding: 8px;
+}
+.air_quality_title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.weather__usEpaIndexLabel {
+  position: relative;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+.weather__uvIndex {
+  position: absolute;
+  margin-right: 380px;
+  z-index: 1;
+  margin-top: 190px;
+  width: 120px;
+  height: 100px;
+  background-color: rgba(110, 110, 110, 0.3);
+  border-radius: 5%;
+  text-align: center;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  font-size: 18px;
+  padding: 8px;
+}
+.uvIndex_title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.weather__uvIndexLabel {
+  position: relative;
+  margin-right: 5px;
+  margin-left: 5px;
 }
 @media only screen and (max-width: 480px) {
   .city {
@@ -106,7 +240,6 @@
   }
   .time_and_date {
     margin-left: 20px;
-    
   }
   .weather {
     margin-left: 0;
@@ -120,7 +253,11 @@
   .weather__humidity {
   }
   .weather__wind {
-    margin-left: 0;
+    margin-bottom: 100px;
+  }
+  .weather__pressure {
+    margin-left: 80px;
+    margin-top: 320px;
   }
 }
 
@@ -135,9 +272,13 @@
   .weather {
     margin-left: 0;
   }
-  .weather__feelslike,
-  .weather__humidity,
+  .weather__feelslike {
+    margin-left: 450px;
+  }
+  .weather__humidity {
+  }
   .weather__wind {
-    margin-left: 0;
+    margin-left: 160px;
+    margin-bottom: 100px;
   }
 }
