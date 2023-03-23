@@ -6,7 +6,6 @@ export default {
     city: String,
     country: String,
   },
-
   methods: {
     getForecast() {
       console.log("City:", this.city);
@@ -31,4 +30,3 @@ export default {
     this.getForecast();
   },
 };
-

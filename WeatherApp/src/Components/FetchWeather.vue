@@ -1,5 +1,6 @@
 <script>
 import FetchWeatherObj from "./FetchWeather.js";
+import FetchAstronomy from "./FetchAstronomy.vue";
 import FetchForecast from "./FetchForecast.vue";
 import FetchHistory from "./FetchHistory.vue";
 import "../css/main.css";
@@ -14,6 +15,7 @@ export default {
   components: {
     FetchForecast,
     FetchHistory,
+    FetchAstronomy,
   },
   data() {
     return {
@@ -36,6 +38,8 @@ export default {
       time: null,
       weather: null,
       feelslike_c: null,
+      feelslike_f: null,
+      isCelsius: true,
       icon: null,
       description: null,
       temp: null,
@@ -57,9 +61,10 @@ export default {
       isMb: true,
       isKM: true,
       sunset: null,
+      temp_c: null,
+      temp_f: null,
       maxtemp_c: null,
       mintemp_c: null,
-      avghumidity: null,
       error: null,
     };
   },
@@ -104,11 +109,25 @@ export default {
     <div class="time_and_date">{{ date }} {{ time }}</div>
 
     <div v-if="weather" class="weather">
-      <div class="weather__temp">{{ temp }}°C</div>
+      <div>
+        <div class="weather__temp">{{ temperature }}°</div>
+        <div>
+          <span @click="toggleTemperature('c')" class="weather__temp__toggle"
+            >°C</span
+          >
+          <span @click="toggleTemperature('f')" class="weather__temp__toggle"
+            >°F</span
+          >
+        </div>
+        <div class="weather__feelslike">
+          Feels like: {{ convertFeelsLikeTemperature }}
+        </div>
+      </div>
+      <FetchAstronomy :city="city" :country="country" />
       <div class="weather__icon">
         <img :src="icon" width="150" height="150" alt="weather icon" />
       </div>
-      <div class="weather__feelslike">Feels like: {{ feelslike_c }}°C</div>
+
       <div class="weather__air_quality">
         <p class="air_quality_title">Air Quality</p>
         <div>{{ carbonMonoxide }} co</div>
@@ -177,7 +196,7 @@ export default {
         </div>
       </div>
     </div>
-    <div v-if="weather" class="forecast_title">5-day forecast</div>
+    <div v-if="weather" class="forecast_title">3-day forecast</div>
     <div v-if="weather" class="forecast">
       <FetchForecast :city="city" :country="country" />
     </div>

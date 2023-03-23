@@ -43,6 +43,7 @@ export default {
       this.date = null;
       this.time = null;
       this.weather = null;
+      this.temp_c = null;
       this.feelslike_c = null;
       this.icon = null;
       this.description = null;
@@ -67,7 +68,20 @@ export default {
           return { status: "Unknown", carbonMonoxide };
       }
     },
-
+    toggleTemperature(temperature) {
+      if (temperature === "c") {
+        this.isCelsius = true;
+      } else {
+        this.isCelsius = false;
+      }
+    },
+    convertFeelsLike() {
+      if (this.isCelsius) {
+        return this.feelslike_c;
+      } else {
+        return this.feelslike_f;
+      }
+    },
     toggleUnits(unit) {
       if (unit === "mph") {
         this.isKmph = false;
@@ -117,13 +131,14 @@ export default {
           this.time = response.data.location.localtime.split(" ")[1];
           this.weather = response.data;
           this.feelslike_c = this.weather.current.feelslike_c;
+          this.feelslike_f = this.weather.current.feelslike_f;
           this.air_quality = this.weather.current.air_quality;
           this.icon = this.weather.current.condition.icon;
           this.description = this.weather.current.condition.text;
           this.temp = this.weather.current.temp_c;
+          this.temp_f = this.weather.current.temp_f;
           this.wind = this.weather.current.wind_kph;
           this.wind_mph = this.weather.current.wind_mph;
-          //   this.air_quality = this.weather.current.air_quality;
           this.uvIndex = this.weather.current.uv;
           this.usEpaIndex = response.data.current.air_quality["us-epa-index"];
           this.carbonMonoxide = Math.floor(
@@ -135,8 +150,7 @@ export default {
           this.pressure_mb = this.weather.current.pressure_mb;
           this.vis_km = this.weather.current.vis_km;
           this.vis_miles = this.weather.current.vis_miles;
-          this.sunrise = this.weather.current.sunrise;
-          this.sunset = this.weather.current.sunset;
+          this.moon_phase = this.weather.current.moon_phase;
           this.country = this.weather.location.country;
           this.error = null;
 
@@ -221,6 +235,12 @@ export default {
   },
 
   computed: {
+    temperature() {
+      return this.isCelsius ? this.temp : this.temp_f;
+    },
+    convertFeelsLikeTemperature() {
+      return this.isCelsius ? this.feelslike_c : this.feelslike_f;
+    },
     windSpeed() {
       return this.isKmph ? this.wind : this.wind_mph;
     },
