@@ -74,28 +74,28 @@
   font-family: century gothic;
   color: #000000;
   margin-left: 180px;
-  
 }
 
 .weather__feelslike {
   position: absolute;
   margin-left: 168px;
   margin-top: 60px;
-  
   font-size: 20px;
   font-weight: bold;
-  
 }
-.weather__temp__toggle{
+.weather__temp__toggle {
   position: relative;
   font-size: 20px;
   margin-left: 20px;
   left: 170px;
   top: 100px;
-  font-weight: bold;  
-  /* margin-right: 25px; */
+  font-weight: bold;
   z-index: 1;
 }
+.weather__temp__toggle:hover {
+  text-decoration: underline;
+}
+ 
 
 .weather__wind {
   position: absolute;

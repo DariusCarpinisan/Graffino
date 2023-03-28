@@ -230,8 +230,8 @@ export default {
   },
 
   mounted() {
-    this.getWeather();
     this.refreshWeatherData();
+    this.getWeather();
   },
 
   computed: {

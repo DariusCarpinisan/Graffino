@@ -87,7 +87,7 @@ export default {
             v-model="city"
             @keyup.enter="getWeather"
           />
-          <button @click.prevent="getWeather" class="submit">
+          <button @click.prevent="refreshWeatherData" class="submit">
             <i class="fa fa-search"></i>
           </button>
         </form>

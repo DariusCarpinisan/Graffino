@@ -1,6 +1,5 @@
 <script setup>
 import Home from "./Components/FetchWeather.vue";
-
 </script>
 
 <script>
