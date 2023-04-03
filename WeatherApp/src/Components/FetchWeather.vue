@@ -1,156 +1,72 @@
 <script>
-import axios from "axios";
-import moment from "moment";
+import FetchWeatherObj from "./FetchWeather.js";
+import FetchAstronomy from "./FetchAstronomy.vue";
 import FetchForecast from "./FetchForecast.vue";
 import FetchHistory from "./FetchHistory.vue";
 import "../css/main.css";
 import "../css/body.css";
-import "../css/photo.css";
 import "../css/panel.css";
+import "../css/photo.css";
 import "../css/responsive.css";
 
 export default {
   name: "FetchWeather",
+  ...FetchWeatherObj,
   components: {
     FetchForecast,
     FetchHistory,
+    FetchAstronomy,
   },
   data() {
     return {
-      apiKey: "b3241bb7b3f846a4b05132912230903",
-      unsplashApiKey: "v6PLxvQp-fZ2aeW1zla-kVox3OzVijcPxDS6IiKw9jY",
+      apiKey: import.meta.env.VITE_API_KEY,
+      unsplashApiKey: import.meta.env.VITE_UNSPLASH_API_KEY,
       photoUrl: null,
       city: "",
+      cities: [
+        "Bucharest",
+        "London",
+        "Paris",
+        "New York",
+        "Tokyo",
+        "Sydney",
+        "Moscow",
+      ],
       cityName: null,
       country: "",
       date: null,
       time: null,
       weather: null,
       feelslike_c: null,
+      feelslike_f: null,
+      isCelsius: true,
       icon: null,
       description: null,
       temp: null,
-      humidity: null,
       wind: null,
+      air_quality: null,
+      uvIndex: null,
+      usEpaIndex: null,
+      carbonMonoxide: null,
+      vis_km: null,
+      vis_miles: null,
+      precip_in: null,
+      precip_mm: null,
+      pressure_in: null,
+      pressure_mb: null,
       sunrise: null,
+      wind_mph: null,
+      isKmph: true,
+      isIn: true,
+      isMb: true,
+      isKM: true,
       sunset: null,
+      temp_c: null,
+      temp_f: null,
       maxtemp_c: null,
       mintemp_c: null,
-      avghumidity: null,
-      maxwind_kph: null,
       error: null,
     };
-  },
-  methods: {
-    getWeather() {
-      if (!this.city) {
-        this.error = "Please enter a city.";
-        return;
-      }
-
-      axios
-        .get(
-          `https://api.weatherapi.com/v1/current.json?key=${this.apiKey}&q=${this.city},${this.country}&days=5&aqi=no&alerts=no`
-        )
-        .then((response) => {
-          console.log(response);
-          this.cityName = this.city;
-          this.date = moment(
-            response.data.location.localtime.split(" ")[0]
-          ).format("dddd, MMMM Do YYYY");
-          this.time = response.data.location.localtime.split(" ")[1];
-          this.weather = response.data;
-          this.feelslike_c = this.weather.current.feelslike_c;
-          this.icon = this.weather.current.condition.icon;
-          this.description = this.weather.current.condition.text;
-          this.temp = this.weather.current.temp_c;
-          this.humidity = this.weather.current.humidity;
-          this.wind = this.weather.current.wind_kph;
-          this.sunrise = this.weather.current.sunrise;
-          this.sunset = this.weather.current.sunset;
-          this.country = this.weather.location.country;
-          this.error = null;
-
-          let query = "";
-          switch (this.description) {
-            case "Sunny":
-            case "Clear":
-              query = "Clear Weather";
-              break;
-            case "Partly cloudy":
-            case "Cloudy":
-            case "Overcast":
-              query = "Cloudy Sky";
-              break;
-            case "Mist":
-            case "Fog":
-            case "Haze":
-              query = "Mist";
-              break;
-            case "Rain":
-            case "Moderate or heavy rain shower":
-            case "Light rain":
-            case "Moderate or heavy rain":
-            case "Moderate or heavy freezing rain":
-            case "Freezing rain":
-            case "Patchy light rain":
-            case "Patchy light drizzle":
-            case "Light drizzle":
-            case "Light rain shower":
-            case "Light showers of ice pellets":
-            case "Light sleet":
-            case "Light sleet showers":
-              query = "Rainy Sky";
-              break;
-            case "Thunderstorm":
-            case "Moderate or heavy rain with thunder":
-            case "Patchy light rain with thunder":
-            case "Moderate or heavy snow with thunder":
-            case "Patchy light snow with thunder":
-              query = "Thunderstorm Sky";
-              break;
-            case "Snow":
-            case "Light snow":
-            case "Moderate snow":
-            case "Blizzard":
-            case "Patchy light snow":
-            case "Patchy moderate snow":
-            case "Patchy heavy snow":
-            case "Moderate or heavy snow showers":
-            case "Moderate or heavy snow in area with thunder":
-            case "Patchy light snow in area with thunder":
-            case "Moderate or heavy rain in area with thunder":
-            case "Patchy light rain in area with thunder":
-              query = "Snow Sky";
-              break;
-            default:
-              query = this.cityName;
-              break;
-          }
-
-          axios
-            .get(
-              `https://api.unsplash.com/search/photos?query=${query}&client_id=${this.unsplashApiKey}`
-            )
-            .then((response) => {
-              console.log(response);
-              this.photoUrl = response.data.results[0].urls.regular;
-              const img = new Image();
-              img.src = this.photoUrl;
-              img.addEventListener("load", () => {
-                document.querySelector(".fade-in").classList.add("loaded");
-              });
-            });
-        });
-    },
-  },
-  // watch: {
-  //   city: function (newValue, oldValue) {
-  //     this.getWeather();
-  //   },
-  // },
-  mounted() {
-    this.getWeather();
   },
 };
 </script>
@@ -171,7 +87,7 @@ export default {
             v-model="city"
             @keyup.enter="getWeather"
           />
-          <button @click.prevent="getWeather" class="submit">
+          <button @click.prevent="refreshWeatherData" class="submit">
             <i class="fa fa-search"></i>
           </button>
         </form>
@@ -179,41 +95,11 @@ export default {
         <div class="cities">
           <ul>
             <li
-              @click="
-                city = 'New York';
-                country = 'USA';
-                getWeather();
-              "
+              v-for="city in cities"
+              :key="city"
+              @click="getWeatherForCity(city, getCountry(city))"
             >
-              New York
-            </li>
-            <li
-              @click="
-                city = 'London';
-                country = 'UK';
-                getWeather();
-              "
-            >
-              London
-            </li>
-
-            <li
-              @click="
-                city = 'Paris';
-                country = 'France';
-                getWeather();
-              "
-            >
-              Paris
-            </li>
-            <li
-              @click="
-                city = 'Tokyo';
-                country = 'Japan';
-                getWeather();
-              "
-            >
-              Tokyo
+              {{ city }}
             </li>
           </ul>
         </div>
@@ -223,19 +109,94 @@ export default {
     <div class="time_and_date">{{ date }} {{ time }}</div>
 
     <div v-if="weather" class="weather">
-      <div class="weather__temp">{{ temp }}°C</div>
+      <div>
+        <div class="weather__temp">{{ temperature }}°</div>
+        <div>
+          <span @click="toggleTemperature('c')" class="weather__temp__toggle"
+            >°C</span
+          >
+          <span @click="toggleTemperature('f')" class="weather__temp__toggle"
+            >°F</span
+          >
+        </div>
+        <div class="weather__feelslike">
+          Feels like: {{ convertFeelsLikeTemperature }}
+        </div>
+      </div>
+      <FetchAstronomy :city="city" :country="country" />
       <div class="weather__icon">
-        <img :src="icon" alt="weather icon" />
+        <img :src="icon" width="150" height="150" alt="weather icon" />
       </div>
-      <div class="weather__description">
-        {{ description }}
-      </div>
-      <div class="weather__feelslike">Feels like: {{ feelslike_c }}°C</div>
-      <div class="weather__humidity">Humidity: {{ humidity }}%</div>
 
-      <div class="weather__wind">Wind: {{ wind }}km/h</div>
+      <div class="weather__air_quality">
+        <p class="air_quality_title">Air Quality</p>
+        <div>{{ carbonMonoxide }} co</div>
+        <div class="weather__usEpaIndexLabel">{{ usEpaIndexLabel }}</div>
+      </div>
+      <div class="weather__uvIndex">
+        <p class="uvIndex_title">UV</p>
+        <div>{{ uvIndex }}</div>
+        <div class="weather__uvIndexLabel">{{ uvIndexLabel }}</div>
+      </div>
+
+      <div class="weather__pressure">
+        <p class="pressure_title">Pressure</p>
+        <div>{{ pressure }}</div>
+        <div>
+          <span @click="togglePressure('in')" class="weather__pressure__toggle"
+            >in</span
+          >
+          <span @click="togglePressure('mb')" class="weather__pressure__toggle"
+            >mb</span
+          >
+        </div>
+      </div>
+      <div class="weather__visibility">
+        <p class="visibility_title">Visibility</p>
+        <div>{{ visibility }}</div>
+        <div>
+          <span
+            @click="toggleVisibility('km')"
+            class="weather__visibility__toggle"
+            >km</span
+          >
+          <span
+            @click="toggleVisibility('miles')"
+            class="weather__visibility__toggle"
+            >mi</span
+          >
+        </div>
+      </div>
+      <div class="weather__precipitation">
+        <p class="precipitation_title">Precipitation</p>
+        <div>{{ precipitation }}</div>
+        <div>
+          <span
+            @click="togglePrecipitation('in')"
+            class="weather__precipitation__toggle"
+            >in</span
+          >
+          <span
+            @click="togglePrecipitation('mm')"
+            class="weather__precipitation__toggle"
+            >mm</span
+          >
+        </div>
+      </div>
+      <div class="weather__wind">
+        <p class="wind_title">Wind</p>
+        <div>{{ windSpeed }}</div>
+        <div>
+          <span @click="toggleUnits('kmph')" class="weather__wind__toggle"
+            >kmph</span
+          >
+          <span @click="toggleUnits('mph')" class="weather__wind__toggle"
+            >mph</span
+          >
+        </div>
+      </div>
     </div>
-    <div v-if="weather" class="forecast_title">5-day forecast</div>
+    <div v-if="weather" class="forecast_title">3-day forecast</div>
     <div v-if="weather" class="forecast">
       <FetchForecast :city="city" :country="country" />
     </div>

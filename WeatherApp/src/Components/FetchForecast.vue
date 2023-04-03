@@ -1,44 +1,22 @@
 <script>
+import FetchForecastObj from "./FetchForecast.js";
 import moment from "moment";
-import axios from "axios";
 import "../css/forecastday.css";
 
 export default {
   name: "FetchForecast",
+  ...FetchForecastObj,
   props: {
     city: String,
     country: String,
   },
   data() {
     return {
-      apiKey: "b3241bb7b3f846a4b05132912230903",
+      apiKey: import.meta.env.VITE_API_KEY,
       forecastDay: [],
       error: null,
       moment: moment,
     };
-  },
-  methods: {
-    getForecast() {
-      console.log("City:", this.city);
-      console.log("Country:", this.country);
-      axios
-        .get(
-          `https://api.weatherapi.com/v1/forecast.json?key=${this.apiKey}&q=${this.city},${this.country}&days=5&aqi=no&alerts=no`
-        )
-        .then((response) => {
-          console.log(response);
-          this.forecastDay = response.data.forecast.forecastday;
-          this.error = null;
-        })
-        .catch((error) => {
-          console.log(error);
-          this.error = "Error retrieving forecast data";
-          this.forecastDay = null;
-        });
-    },
-  },
-  mounted() {
-    this.getForecast();
   },
 };
 </script>
